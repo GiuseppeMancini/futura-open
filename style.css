@@ -1,0 +1,179 @@
+:root {
+  --blu: #2b5782;
+  --rosso: #891111;
+  --nero: #000;
+  --verde: #216321;
+  --campo: #e6e6e6;
+  --sfondo: #f4f5f7;
+  --testo: #1d2330;
+  --bordo: #c9ced6;
+  --accento: #2b5782;
+  --dur: 900ms;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--testo);
+  background: var(--sfondo);
+  line-height: 1.45;
+}
+
+.testata, .app { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+.testata h1 { margin: 16px 0 4px; font-size: 1.6rem; }
+.testata p { margin: 0 0 12px; color: #4a5365; }
+
+.app { display: grid; grid-template-columns: 1fr; gap: 16px; padding-bottom: 16px; }
+@media (min-width: 900px) {
+  .app { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: start; }
+}
+
+/* PC / portatile: tutto nella finestra, senza scrollbar della pagina. */
+@media (min-width: 900px) and (min-height: 560px) {
+  html, body { height: 100%; overflow: hidden; }
+  body { display: flex; flex-direction: column; }
+  .testata { width: 100%; flex: none; }
+  .testata h1 { margin: 10px 0 2px; font-size: 1.35rem; }
+  .testata p { margin: 0 0 8px; font-size: .88rem; }
+  .app { flex: 1 1 0; min-height: 0; width: 100%; padding-bottom: 12px; align-items: stretch; }
+  .colonna-campo { display: flex; flex-direction: column; min-height: 0; min-width: 0; }
+  .selettori { margin-bottom: 8px; gap: 6px; }
+  .colonna-campo .stage { flex: 1 1 0; min-height: 0; width: auto; max-width: 100%; align-self: center; }
+  .comandi { margin-top: 8px; }
+  .nomi { max-height: 30vh; overflow: auto; }
+  .colonna-testo { min-height: 0; overflow-y: auto; scrollbar-width: none; }
+  .colonna-testo::-webkit-scrollbar { display: none; }
+}
+
+button {
+  font: inherit;
+  min-height: 44px;
+  padding: 6px 14px;
+  border: 1px solid var(--bordo);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--testo);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+button:hover { background: #eef1f6; }
+button:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px solid #f2a900; outline-offset: 2px; }
+button[aria-pressed="true"], button.attivo { background: var(--accento); color: #fff; border-color: var(--accento); }
+button.primario { background: #1f2937; color: #fff; border-color: #1f2937; }
+button:disabled { opacity: .45; cursor: default; }
+
+.selettori { display: grid; gap: 10px; margin-bottom: 10px; }
+.gruppo { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.gruppo .etichetta { font-size: .9rem; color: #4a5365; margin-right: 4px; }
+.modo small { font-weight: 400; opacity: .85; }
+.pos-bottoni { display: flex; gap: 6px; flex-wrap: wrap; }
+.pos-bottoni button { min-width: 48px; }
+
+/* Palcoscenico: 100 x 90 unit\00E0 = 100cqw x 90cqw. Il campo (72x72) parte a (14, 10). */
+.stage {
+  container-type: inline-size;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 100 / 90;
+  background: #fff;
+  border: 1px solid var(--bordo);
+  border-radius: 10px;
+  overflow: hidden;
+  user-select: none;
+}
+.campo {
+  position: absolute;
+  left: 14cqw; top: 10cqw; width: 72cqw; height: 72cqw;
+  background: var(--campo);
+}
+.campo::before { /* rete */
+  content: ""; position: absolute; left: -1cqw; right: -1cqw; top: -.7cqw; height: .7cqw; background: #333;
+}
+.linea-3m {
+  position: absolute; left: 0; right: 0; top: 24.25cqw; height: .5cqw; background: #808080;
+}
+.zone {
+  position: absolute; inset: 0;
+  display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr);
+}
+.zone[hidden] { display: none; }
+.zone div {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 7cqw; font-weight: 700; color: var(--verde); opacity: .35;
+  border: 1px dashed rgba(33, 99, 33, .4);
+}
+.fuori {
+  position: absolute; left: 88cqw; top: 42cqw; width: 12cqw; height: 8cqw;
+  border: 1px dashed var(--verde); border-radius: 4px;
+  display: flex; align-items: flex-end; justify-content: center;
+}
+.fuori span { font-size: 1.6cqw; color: var(--verde); margin-bottom: .2cqw; }
+
+.palla {
+  position: absolute; width: 4cqw; height: 4cqw; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff 0 35%, #f3c623 36% 100%);
+  border: .3cqw solid #b28a00;
+  transition: left var(--dur) ease-in-out, top var(--dur) ease-in-out;
+  z-index: 3;
+}
+
+.giocatore {
+  position: absolute; width: 9.2cqw; height: 4.2cqw;
+  border-radius: 1cqw;
+  background: var(--nero); color: #fff;
+  display: flex; align-items: center; justify-content: center; gap: .3cqw;
+  font-size: 2.3cqw; font-weight: 700;
+  transition: left var(--dur) ease-in-out, top var(--dur) ease-in-out;
+  z-index: 2;
+}
+.giocatore sub { font-size: 1.6cqw; font-weight: 400; vertical-align: baseline; align-self: flex-end; margin-bottom: .6cqw; }
+.giocatore.s { background: var(--blu); }
+.giocatore.l { background: var(--rosso); }
+.giocatore.fuori-campo { background: var(--verde); }
+.giocatore .nome {
+  position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  margin-top: .2cqw; font-size: 1.9cqw; font-weight: 600; color: #111;
+  background: rgba(255,255,255,.8); padding: 0 .5cqw; border-radius: .5cqw; white-space: nowrap; max-width: 18cqw; overflow: hidden; text-overflow: ellipsis;
+}
+@media (max-width: 600px) {
+  .giocatore { font-size: 3cqw; }
+  .giocatore sub { font-size: 2cqw; }
+  .giocatore .nome { font-size: 2.6cqw; }
+}
+
+.comandi { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.comandi button { flex: 1 1 auto; }
+.comandi.secondari button { flex: 0 1 auto; }
+@media (max-width: 600px) { .comandi button { flex: 1 1 45%; } }
+
+.nomi { margin-top: 10px; padding: 12px; border: 1px solid var(--bordo); border-radius: 10px; background: #fff; }
+.nomi[hidden] { display: none; }
+.nomi p { margin: 0 0 8px; font-size: .9rem; color: #4a5365; }
+#nomi-campi { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px; margin-bottom: 8px; }
+.nomi label { display: grid; gap: 2px; font-size: .85rem; }
+.nomi input { font: inherit; min-height: 40px; padding: 4px 8px; border: 1px solid var(--bordo); border-radius: 6px; }
+#copia-esito { margin-left: 8px; font-size: .9rem; color: var(--verde); }
+
+.pannello { background: #fff; border: 1px solid var(--bordo); border-radius: 10px; padding: 12px 14px; margin-bottom: 12px; }
+.pannello h2 { margin: 0 0 6px; font-size: 1.1rem; }
+.pannello p { margin: 6px 0; }
+.fase { font-weight: 700; color: var(--accento); }
+.contesto { color: #4a5365; font-size: .95rem; border-top: 1px solid var(--bordo); padding-top: 8px; margin-top: 10px; }
+summary { cursor: pointer; font-weight: 700; padding: 4px 0; min-height: 32px; }
+dt { font-weight: 700; margin-top: 8px; }
+dd { margin: 2px 0 0 0; }
+.legenda { list-style: none; padding: 0; margin: 0 0 8px; display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 4px; }
+.nota { font-size: .88rem; color: #4a5365; }
+.chip { display: inline-block; min-width: 1.8em; text-align: center; padding: 0 .4em; border-radius: 4px; background: var(--nero); color: #fff; font-weight: 700; font-size: .85rem; }
+.chip.s { background: var(--blu); }
+.chip.l { background: var(--rosso); }
+.chip.fuori-chip { background: var(--verde); }
+
+.piede { font-size: .85rem; color: #5a6477; padding: 0 0 16px; margin: 0; }
+.piede a { color: var(--accento); }
+
+@media (prefers-reduced-motion: reduce) {
+  .giocatore, .palla { transition-duration: 1ms !important; }
+}

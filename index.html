@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Formazione 5-1 – schemi animati</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="testata">
+  <h1>Formazione 5-1</h1>
+  <p>Un solo palleggiatore in tutte e sei le rotazioni. In questa versione l&rsquo;opposto non riceve la battuta. Scegli una rotazione per vedere dove parte ciascun giocatore e come si muove.</p>
+</header>
+
+<main class="app">
+  <section class="colonna-campo" aria-label="Campo">
+    <div class="selettori">
+      <div class="gruppo" role="group" aria-label="Chi batte">
+        <button type="button" class="modo" data-modo="ricezione" aria-pressed="true">Ricezione <small>(batte l&rsquo;avversario)</small></button>
+        <button type="button" class="modo" data-modo="battuta" aria-pressed="false">Battuta <small>(batti tu)</small></button>
+      </div>
+      <div class="gruppo" role="group" aria-label="Posizione di partenza del palleggiatore">
+        <span class="etichetta">Palleggiatore in posizione</span>
+        <div class="pos-bottoni" id="posizioni"></div>
+      </div>
+    </div>
+
+    <div class="stage" id="stage" role="group" aria-label="Campo interattivo della formazione 5-1">
+      <div class="campo" id="campo">
+        <div class="zone" id="zone" hidden>
+          <div>4</div><div>3</div><div>2</div>
+          <div>5</div><div>6</div><div>1</div>
+        </div>
+        <div class="linea-3m"></div>
+      </div>
+      <div class="fuori" id="fuori"><span>fuori campo</span></div>
+      <div class="palla" id="palla" aria-hidden="true"></div>
+      <div id="giocatori"></div>
+    </div>
+
+    <div class="comandi" role="group" aria-label="Comandi">
+      <button type="button" id="prec">&#9664; Fase precedente</button>
+      <button type="button" id="play" class="primario">Continua</button>
+      <button type="button" id="succ">Fase successiva &#9654;</button>
+      <button type="button" id="riavvia">Riavvia</button>
+    </div>
+    <div class="comandi secondari">
+      <button type="button" id="toggle-zone" aria-pressed="false">Mostra numeri di zona</button>
+      <button type="button" id="toggle-nomi" aria-expanded="false" aria-controls="nomi">Modifica nomi</button>
+    </div>
+
+    <form class="nomi" id="nomi" hidden autocomplete="off">
+      <p>I nomi compaiono sul campo e vengono salvati nel link della pagina.</p>
+      <div id="nomi-campi"></div>
+      <button type="button" id="copia-link">Copia il link</button>
+      <span id="copia-esito" role="status"></span>
+    </form>
+  </section>
+
+  <section class="colonna-testo" aria-label="Spiegazioni">
+    <div class="pannello">
+      <h2>Cosa succede, e perch&eacute;</h2>
+      <p class="fase" id="fase"></p>
+      <p id="descrizione" aria-live="polite"></p>
+      <p class="contesto" id="contesto"></p>
+    </div>
+
+    <div class="pannello">
+      <h2>Legenda</h2>
+      <ul class="legenda">
+        <li><span class="chip s">P</span> Palleggiatore</li>
+        <li><span class="chip">S</span> Schiacciatore di banda</li>
+        <li><span class="chip">C</span> Centrale</li>
+        <li><span class="chip">O</span> Opposto</li>
+        <li><span class="chip l">L</span> Libero</li>
+      </ul>
+      <p class="nota">Il piccolo numero sul giocatore &egrave; la sua posizione di rotazione (4, 3, 2 = prima linea; 5, 6, 1 = seconda linea): resta uguale per tutto lo scambio, anche quando il giocatore si sposta.</p>
+      <p class="nota"><span class="chip s">blu</span> il palleggiatore &middot; <span class="chip l">rosso scuro</span> il libero &middot; <span class="chip">nero</span> gli altri &middot; <span class="chip fuori-chip">verde</span> a lato del campo: il giocatore fuori dal campo in quel momento a causa dello scambio con il libero.</p>
+    </div>
+
+    <details class="pannello">
+      <summary>Responsabilit&agrave; dei giocatori</summary>
+      <dl id="responsabilita"></dl>
+    </details>
+
+    <details class="pannello">
+      <summary>Difesa di base</summary>
+      <p id="difesa"></p>
+    </details>
+    <p class="piede">Schemi tratti da <a href="https://learnvolley.com/formation5-1" rel="noopener">learnvolley.com/formation5-1</a>, tradotti in italiano. I tempi delle animazioni sono scelti da questa app.</p>
+  </section>
+</main>
+
+
+
+<script src="dati.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
