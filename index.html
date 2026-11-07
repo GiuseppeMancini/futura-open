@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Formazione 5-1 – schemi animati</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="style.css">
@@ -15,6 +15,7 @@
 
 <main class="app">
   <section class="colonna-campo" aria-label="Campo">
+    <div class="vista">
     <div class="selettori">
       <div class="gruppo" role="group" aria-label="Chi batte">
         <button type="button" class="modo" data-modo="ricezione" aria-pressed="true">Ricezione <small>(batte l&rsquo;avversario)</small></button>
@@ -38,14 +39,15 @@
       <div class="palla" id="palla" aria-hidden="true"></div>
       <div id="giocatori"></div>
     </div>
+    </div>
 
-    <div class="comandi" role="group" aria-label="Comandi">
-      <button type="button" id="prec">&#9664; Fase precedente</button>
+    <div class="comandi barra" role="group" aria-label="Comandi">
+      <button type="button" id="prec" aria-label="Fase precedente">&#9664; Indietro</button>
       <button type="button" id="play" class="primario">Continua</button>
-      <button type="button" id="succ">Fase successiva &#9654;</button>
-      <button type="button" id="riavvia">Riavvia</button>
+      <button type="button" id="succ" aria-label="Fase successiva">Avanti &#9654;</button>
     </div>
     <div class="comandi secondari">
+      <button type="button" id="riavvia">Riavvia</button>
       <button type="button" id="toggle-zone" aria-pressed="false">Mostra numeri di zona</button>
       <button type="button" id="toggle-nomi" aria-expanded="false" aria-controls="nomi">Modifica nomi</button>
     </div>
@@ -66,8 +68,8 @@
       <p class="contesto" id="contesto"></p>
     </div>
 
-    <div class="pannello">
-      <h2>Legenda</h2>
+    <details class="pannello" id="legenda-box">
+      <summary>Legenda</summary>
       <ul class="legenda">
         <li><span class="chip s">P</span> Palleggiatore</li>
         <li><span class="chip">S</span> Schiacciatore di banda</li>
@@ -77,7 +79,7 @@
       </ul>
       <p class="nota">Il piccolo numero sul giocatore &egrave; la sua posizione di rotazione (4, 3, 2 = prima linea; 5, 6, 1 = seconda linea): resta uguale per tutto lo scambio, anche quando il giocatore si sposta.</p>
       <p class="nota"><span class="chip s">blu</span> il palleggiatore &middot; <span class="chip l">rosso scuro</span> il libero &middot; <span class="chip">nero</span> gli altri &middot; <span class="chip fuori-chip">verde</span> a lato del campo: il giocatore fuori dal campo in quel momento a causa dello scambio con il libero.</p>
-    </div>
+    </details>
 
     <details class="pannello">
       <summary>Responsabilit&agrave; dei giocatori</summary>

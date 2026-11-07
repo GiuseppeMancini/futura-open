@@ -221,6 +221,7 @@ el.copiaLink.addEventListener('click', async () => {
 el.stage.addEventListener('click', (e) => { if (e.target === el.stage || e.target.closest('#campo')) el.toggleZone.click(); });
 
 /* ---- Avvio ---- */
+if (window.matchMedia('(min-width: 900px)').matches) document.getElementById('legenda-box').open = true;
 costruisci();
 leggiNomi();
 mostraNomi();
