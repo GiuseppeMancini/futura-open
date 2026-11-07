@@ -122,28 +122,35 @@ button:disabled { opacity: .45; cursor: default; }
 }
 
 .giocatore {
-  position: absolute; width: 9.2cqw; height: 4.2cqw;
-  border-radius: 1cqw;
-  background: var(--nero); color: #fff;
-  display: flex; align-items: center; justify-content: center; gap: .3cqw;
-  font-size: 2.3cqw; font-weight: 700;
+  --col: var(--nero);
+  position: absolute; width: 10cqw; height: 9.4cqw;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 3.7cqw; font-weight: 800; letter-spacing: -.02em;
   transition: left var(--dur) ease-in-out, top var(--dur) ease-in-out;
   z-index: 2;
+  filter: drop-shadow(0 .5cqw .5cqw rgba(0,0,0,.35));
 }
-.giocatore sub { font-size: 1.6cqw; font-weight: 400; vertical-align: baseline; align-self: flex-end; margin-bottom: .6cqw; }
-.giocatore.s { background: var(--blu); }
-.giocatore.l { background: var(--rosso); }
-.giocatore.fuori-campo { background: var(--verde); }
+.giocatore::before { /* sagoma a maglia */
+  content: ""; position: absolute; inset: 0; background: var(--col); z-index: -1;
+  clip-path: polygon(0 24%, 24% 0, 39% 0, 50% 13%, 61% 0, 76% 0, 100% 24%, 87% 42%, 77% 35%, 77% 100%, 23% 100%, 23% 35%, 13% 42%);
+}
+.giocatore .sigla { margin-top: 1.4cqw; text-shadow: 0 0 .4cqw rgba(0,0,0,.4); }
+.giocatore sub { /* posizione di rotazione: badge */
+  position: absolute; right: -.6cqw; bottom: -.6cqw;
+  min-width: 3.6cqw; height: 3.6cqw; padding: 0 .4cqw; border-radius: 1.8cqw;
+  background: #fff; color: #111; border: .3cqw solid var(--col);
+  font-size: 2.4cqw; font-weight: 800; line-height: 3cqw; text-align: center;
+}
+.giocatore sub:empty { display: none; }
+.giocatore.s { --col: var(--blu); }
+.giocatore.l { --col: var(--rosso); }
+.giocatore.fuori-campo { --col: var(--verde); }
 .giocatore .nome {
   position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
-  margin-top: .2cqw; font-size: 1.9cqw; font-weight: 600; color: #111;
-  background: rgba(255,255,255,.8); padding: 0 .5cqw; border-radius: .5cqw; white-space: nowrap; max-width: 18cqw; overflow: hidden; text-overflow: ellipsis;
+  margin-top: .6cqw; font-size: 2.7cqw; font-weight: 700; color: #111;
+  background: rgba(255,255,255,.88); padding: 0 .8cqw; border-radius: .8cqw; white-space: nowrap; max-width: 20cqw; overflow: hidden; text-overflow: ellipsis;
 }
-@media (max-width: 600px) {
-  .giocatore { font-size: 3cqw; }
-  .giocatore sub { font-size: 2cqw; }
-  .giocatore .nome { font-size: 2.6cqw; }
-}
+.giocatore .nome:empty { display: none; }
 
 .comandi { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 .comandi button { flex: 1 1 auto; }
