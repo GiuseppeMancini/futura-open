@@ -144,6 +144,7 @@ function render() {
   el.succ.disabled = stato.step === numStep() - 1;
   el.play.textContent = stato.inCorso ? 'Pausa' : 'Continua';
   el.play.disabled = !stato.inCorso && stato.step === numStep() - 1;
+  aggiornaSchermoAcceso();
 
   document.querySelectorAll('.modo').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.modo === stato.modo)));
   el.posizioni.querySelectorAll('button').forEach(b => b.classList.toggle('attivo', Number(b.dataset.pos) === stato.pos));
@@ -218,7 +219,40 @@ el.copiaLink.addEventListener('click', async () => {
   setTimeout(() => { el.copiaEsito.textContent = ''; }, 3000);
 });
 /* Clic sul campo = mostra/nascondi zone (come nell'originale). */
-el.stage.addEventListener('click', (e) => { if (e.target === el.stage || e.target.closest('#campo')) el.toggleZone.click(); });
+let swipeFatto = false;
+el.stage.addEventListener('click', (e) => {
+  if (swipeFatto) { swipeFatto = false; return; }
+  if (e.target === el.stage || e.target.closest('#campo')) el.toggleZone.click();
+});
+
+/* ---- Swipe sul campo: sinistra = avanti, destra = indietro ---- */
+let tocco = null;
+el.stage.addEventListener('pointerdown', (e) => { tocco = { x: e.clientX, y: e.clientY }; swipeFatto = false; });
+el.stage.addEventListener('pointerup', (e) => {
+  if (!tocco) return;
+  const dx = e.clientX - tocco.x, dy = e.clientY - tocco.y;
+  tocco = null;
+  if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+  swipeFatto = true;
+  (dx < 0 ? el.succ : el.prec).click();
+});
+el.stage.addEventListener('pointercancel', () => { tocco = null; });
+
+/* ---- Schermo acceso durante la riproduzione (se il browser lo supporta) ---- */
+let lucchetto = null;
+async function aggiornaSchermoAcceso() {
+  if (!('wakeLock' in navigator)) return;
+  try {
+    if (stato.inCorso && !lucchetto) {
+      lucchetto = await navigator.wakeLock.request('screen');
+      lucchetto.addEventListener('release', () => { lucchetto = null; });
+    } else if (!stato.inCorso && lucchetto) {
+      await lucchetto.release();
+      lucchetto = null;
+    }
+  } catch (e) { lucchetto = null; }
+}
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') aggiornaSchermoAcceso(); });
 
 /* ---- Avvio ---- */
 if (window.matchMedia('(min-width: 900px)').matches) document.getElementById('legenda-box').open = true;
